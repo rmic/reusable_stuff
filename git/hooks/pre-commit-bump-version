@@ -1,0 +1,21 @@
+#!/usr/bin/env zsh
+
+# Get the project name from pyproject.toml
+project_name=$(awk -F '"' '/^name/ {print $2}' pyproject.toml)
+
+# Get the current version from pyproject.toml
+version=$(awk -F '"' '/^version/ {print $2}' pyproject.toml)
+
+# Increment the patch version number
+version_parts=("${(@s/./)version}")
+version_parts[3]=$((${version_parts[3]}+1))
+new_version="${version_parts[1]}.${version_parts[2]}.${version_parts[3]}"
+
+# Update the version in pyproject.toml
+sed -i '' "s/version = \"$version\"/version = \"$new_version\"/g" pyproject.toml
+sed -i '' "s/__version__ = \"$version\"/__version__ = \"$new_version\"/g" src/cli.py
+
+# Stage the modified file for commit
+git add src/cli.py
+git add pyproject.toml
+
