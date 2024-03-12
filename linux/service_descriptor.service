@@ -1,0 +1,10 @@
+[Unit]
+Description=The Service
+
+[Service]
+Type=simple
+EnvironmentFile=/home/rm/.config/systemd/user/the_service.env
+ExecStart=/opt/the_service/venv/bin/service
+
+[Install]
+WantedBy=default.target
